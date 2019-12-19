@@ -8,6 +8,9 @@ const User = require("./models/users");
 const listingController = require("./controllers/listing");
 const userController = require("./controllers/user");
 const cors = require("cors");
+const Listing = require("./models/listing");
+const listingseed = require("./models/listingseed");
+
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,6 +45,11 @@ app.get("/seed", (req, res) => {
   User.create(seed, (err, createdUsers) => {
     err ? console.log(err.message) : console.log("created users");
     res.status(200).json(createdUsers);
+  });
+});
+app.get("/listingSeed", (req, res) => {
+  Listing.create(listingseed, (err, createdListings) => {
+    err ? console.log(err.message) : res.status(200).json(createdListings);
   });
 });
 

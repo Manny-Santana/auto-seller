@@ -6,11 +6,18 @@
 
 import React, { Component } from "react";
 import ShowListings from "./ShowListings";
+import Header from "./Header";
 
 class Visitor extends Component {
   render() {
     return (
       <div>
+        <Header
+          handleChange={this.props.handleChange}
+          handleSubmit={this.props.handleSubmit}
+          username={this.props.username}
+          password={this.props.password}
+        />
         <h1>Visitor page</h1>
         <ShowListings listings={this.props.listings} />
       </div>

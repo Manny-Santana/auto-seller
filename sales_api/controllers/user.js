@@ -1,7 +1,10 @@
 const express = require("express");
 const users = express.Router();
 const User = require("../models/users");
+const cors = require("cors");
 
+// users.options("*", cors());
+users.use(cors());
 //create
 users.post("/", (req, res) => {
   const newUser = req.body;
@@ -12,7 +15,7 @@ users.post("/", (req, res) => {
 });
 
 //find one
-users.get("/:id", (req, res) => {
+users.get("/:id", cors(), (req, res) => {
   id = req.params.id;
   User.findById(id, (err, foundUser) => {
     err
@@ -26,16 +29,19 @@ users.get("/:id", (req, res) => {
   });
 });
 
-users.post("/authenticate", (req, res) => {
+users.post("/authenticate", cors(), (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   User.findOne({ username: username }, (err, foundUser) => {
+    console.log(foundUser);
     if (err) {
       console.log(err.message);
-    } else if (foundUser.password === password) {
-      res.status(200).json({ loggedIn: true });
     } else {
-      res.status(404).json({ loggedIn: false });
+      if (foundUser.password === password) {
+        res.status(200).json({ user: foundUser, loggedIn: true });
+      } else {
+        res.status(200).json({ user: false, loggedIn: false });
+      }
     }
   });
 });

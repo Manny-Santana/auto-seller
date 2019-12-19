@@ -2,6 +2,7 @@ const express = require("express");
 const listing = express.Router();
 const Listings = require("../models/listing");
 const cors = require("cors");
+const User = require("../models/users");
 
 listing.options("*", cors());
 listing.use(cors());
@@ -12,6 +13,8 @@ listing.get("/", cors(), (req, res) => {
   });
 });
 
+
+
 //show
 listing.get("/:id", cors(), (req, res) => {
   const id = req.params.id;
@@ -19,14 +22,26 @@ listing.get("/:id", cors(), (req, res) => {
     err ? console.log(err.message) : res.status(200).json(foundListing);
   });
 });
+
 //create
 listing.post("/", cors(), (req, res) => {
   const newListing = req.body;
   console.log(newListing);
   Listings.create(newListing, (err, createdListing) => {
+    User.findById(createdListing.author, (err, foundUser) => {
+      if (err) {
+        console.log(err.message);
+      } else {
+        foundUser.listings.unshift(createdListing._id);
+        foundUser.save();
+      }
+    });
+
     err ? console.log(err.message) : res.status(200).json(createdListing);
   });
 });
+
+
 
 //update
 listing.put("/:id", cors(), (req, res) => {

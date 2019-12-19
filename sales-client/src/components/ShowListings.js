@@ -4,13 +4,12 @@ import ListingItem from "./ListingItem";
 
 class ShowListings extends Component {
   render() {
+    const listings = this.props.listings.map(listing => {
+      return <ListingItem key={listing._id} listing={listing} />;
+    });
     return (
-      <div>
-        <h1>Listings</h1>
-        <p>username</p>
-        <p>title</p>
-        <p>vehicle info...</p>
-        <ListingItem />
+      <div className="listings-section">
+        {listings}
       </div>
     );
   }
