@@ -7,10 +7,11 @@ const seed = require("./models/userSeed");
 const User = require("./models/users");
 const listingController = require("./controllers/listing");
 const userController = require("./controllers/user");
-
+const cors = require("cors");
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("*", cors());
 
 //connect to db
 mongoose.connection.on("error", err =>
@@ -28,7 +29,7 @@ mongoose.connection.once("open", () => {
 });
 
 //controllers
-app.get("/", (req, res) => {
+app.get("/", cors(), (req, res) => {
   res.redirect("/home");
 });
 
